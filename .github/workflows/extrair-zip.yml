@@ -1,22 +1,10 @@
 name: Extrair ZIP na raiz
 
-# Uso (pelo celular): suba um zip chamado repo.zip na raiz do repositorio.
-# O workflow roda sozinho, extrai tudo por cima dos arquivos, apaga o repo.zip e faz o commit.
-# Tambem da para rodar na mao (Actions > Extrair ZIP na raiz > Run workflow) com outro nome de zip.
-#
-# Obs.: se o zip trouxer arquivos de .github/workflows, o push com o token padrao e recusado.
-#       Nesse caso crie o segredo PUSH_TOKEN (token pessoal com permissao "workflow").
-# Obs.: o GitHub recusa arquivo maior que 100 MB; use o zip "alterados", nao o repositorio inteiro.
-
 on:
   workflow_dispatch:
-    inputs:
-      zip:
-        description: "Nome do zip na raiz do repositorio"
-        default: repo.zip
   push:
     paths:
-      - "repo.zip"
+      - repo.zip
 
 permissions:
   contents: write
@@ -26,33 +14,26 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Baixar o repositorio
-        uses: actions/checkout@v7
-        with:
-          token: ${{ secrets.PUSH_TOKEN || github.token }}
+        uses: actions/checkout@v4
 
-      - name: Extrair o zip por cima da raiz
-        env:
-         ZIP: ${{ inputs.zip || repo.zip }}
+      - name: Extrair repo.zip por cima da raiz
         run: |
-          set -euo pipefail
-          if [ ! -f "$ZIP" ]; then
-            echo "Nao achei $ZIP na raiz. Nada a fazer."
+          if [ ! -f repo.zip ]; then
+            echo "Nao achei repo.zip na raiz. Nada a fazer."
             exit 0
           fi
           T="$(mktemp -d)"
-          unzip -q -o "$ZIP" -d "$T"
-          # se o zip tem uma unica pasta no topo (ex.: Fnf-codenameps4-main/), usa o conteudo dela
-          mapfile -t TOP < <(find "$T" -mindepth 1 -maxdepth 1)
+          unzip -q -o repo.zip -d "$T"
           SRC="$T"
-          if [ "${#TOP[@]}" -eq 1 ] && [ -d "${TOP[0]}" ]; then SRC="${TOP[0]}"; fi
+          if [ "$(ls -A "$T" | wc -l)" -eq 1 ]; then
+            ONE="$T/$(ls -A "$T")"
+            if [ -d "$ONE" ]; then SRC="$ONE"; fi
+          fi
           rm -rf "$SRC/.git"
           cp -a "$SRC"/. .
-          rm -f "$ZIP"
-          echo "Extraido: $ZIP"
+          rm -f repo.zip
 
-      - name: Commit
-        env:
-          ZIP: ${{ inputs.zip || repo.zip }}
+      - name: Commit e push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -60,6 +41,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nada mudou."
           else
-            git commit -m "Extrair $ZIP"
+            git commit -m "Extrair repo.zip"
             git push
           fi
