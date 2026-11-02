@@ -3,13 +3,10 @@ name: Gerar PKG (PS4)
 on:
   workflow_dispatch:
     inputs:
-      alvo:
-        description: hello (teste) ou jogo (Codename Engine)
-        type: choice
-        options:
-          - hello
-          - jogo
-        default: hello
+      jogo:
+        description: Marque para compilar o Codename Engine (desmarcado = teste hello)
+        type: boolean
+        default: false
 
 env:
   HAXE_VERSION: 4.3.7
@@ -54,14 +51,14 @@ jobs:
           echo "OO_PS4_TOOLCHAIN=$TC" >> "$GITHUB_ENV"
 
       - name: hello - instalar hxcpp
-        if: inputs.alvo == hello
+        if: inputs.jogo == false
         run: |
           mkdir -p "$HOME/haxelib"
           haxelib setup "$HOME/haxelib"
           haxelib install hxcpp --quiet
 
       - name: hello - compilar e empacotar
-        if: inputs.alvo == hello
+        if: inputs.jogo == false
         run: |
           bash orbis/scripts/00-check.sh
           bash orbis/scripts/01-install-toolchain.sh
@@ -69,7 +66,7 @@ jobs:
           bash orbis/scripts/03-build-hello.sh
 
       - name: jogo - bibliotecas Haxe e Lime do engine
-        if: inputs.alvo == jogo
+        if: inputs.jogo == true
         run: |
           haxelib --global update haxelib
           haxe -cp commandline -D analyzer-optimize --run Main setup -si
@@ -78,18 +75,18 @@ jobs:
           haxelib run lime rebuild tools
 
       - name: jogo - toolchain orbis e libs do hxcpp
-        if: inputs.alvo == jogo
+        if: inputs.jogo == true
         run: |
           bash orbis/scripts/00-check.sh
           bash orbis/scripts/01-install-toolchain.sh
           bash orbis/scripts/02-build-hxcpp-libs.sh
 
       - name: jogo - Lime nativo para orbis
-        if: inputs.alvo == jogo
+        if: inputs.jogo == true
         run: haxelib run lime rebuild linux -Dorbis -Dstatic_link -DHXCPP_M64 -nocolor -release
 
       - name: jogo - compilar e empacotar
-        if: inputs.alvo == jogo
+        if: inputs.jogo == true
         run: bash orbis/scripts/04-build-game.sh
 
       - name: Enviar so o pkg
