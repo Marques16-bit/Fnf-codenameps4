@@ -26,7 +26,7 @@ class SystemInfo extends FramerateCategory {
 	static var __formattedSysText:String = "";
 
 	public static function init() {
-		#if linux
+		#if (linux && !orbis)
 		var process = new HiddenProcess("cat", ["/etc/os-release"]);
 		if (process.exitCode() != 0) Logs.error('Unable to grab OS Label');
 		else {
@@ -103,7 +103,7 @@ class SystemInfo extends FramerateCategory {
 			if (process.exitCode() != 0) throw 'Could not fetch CPU information';
 
 			cpuName = process.stdout.readAll().toString().trim().split(":")[1].trim();
-			#elseif linux
+			#elseif (linux && !orbis)
 			var process = new HiddenProcess("cat", ["/proc/cpuinfo"]);
 			if (process.exitCode() != 0) throw 'Could not fetch CPU information';
 

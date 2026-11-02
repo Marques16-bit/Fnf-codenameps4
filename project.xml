@@ -15,6 +15,11 @@
 	-->
 	<haxedef name="cne"/>
 
+	<!-- PS4 (OpenOrbis): compile com  lime build linux -Dorbis  (ver orbis/README.md) -->
+	<haxedef name="orbis" if="orbis"/>
+	<haxedef name="toolchain" value="orbis" if="orbis"/>
+	<haxedef name="static_link" if="orbis"/>
+
 	<!-- Comment this out to disable commit number on FPS -->
 	<define name="SHOW_BUILD_ON_FPS"/>
 
@@ -22,16 +27,16 @@
 	<define name="DARK_MODE_WINDOW"/>
 
 	<!-- Should it checks for updates? -->
-	<define name="UPDATE_CHECKING" if="desktop" unless="hl || debug || COMPILE_EXPERIMENTAL || TEST_BUILD"/>
+	<define name="UPDATE_CHECKING" if="desktop" unless="hl || debug || COMPILE_EXPERIMENTAL || TEST_BUILD || orbis"/>
 
 	<section if="cpp">
 		<!-- Compile With Discord Rich Presence -->
 		<!-- TODO: Update Discord RPC Library & Rewrite DiscordUtil -->
 		<!-- NOTE before v1.1.0 release: PLEASE DO THIS ABOVE -->
-		<define name="DISCORD_RPC" if="desktop"/>
+		<define name="DISCORD_RPC" if="desktop" unless="orbis"/>
 
 		<!-- Compile with video support (hxvlc) -->
-		<define name="VIDEO_CUTSCENES" if="desktop || mobile"/>
+		<define name="VIDEO_CUTSCENES" if="desktop || mobile" unless="orbis"/>
 	</section>
 
 	<!-- Compile with tracy, use to catch memory leaks, generally, don't use this, inflates memory usages by 16gb~ -->
@@ -47,7 +52,7 @@
 	<!-- <define name="STRIPPED_COMPILE" unless="debug"/> -->
 
 	<!-- Comment this out to disable GitHub API integration !-->
-	<define name="GITHUB_API" unless="web || hl"/>
+	<define name="GITHUB_API" unless="web || hl || orbis"/>
 
 	<!-- Comment this out to prevent unused classes from being compiled.
 		 Reduces compilation time at the cost of limited HScript flexibility. !-->
@@ -76,7 +81,7 @@
 	<haxedef name="SOFTCODED_STATES"/>
 
 	<!-- Comment this out to disable support for custom ndlls. !-->
-	<haxedef name="NDLLS_SUPPORTED" unless="web || iphonesim || hl"/>
+	<haxedef name="NDLLS_SUPPORTED" unless="web || iphonesim || hl || orbis"/>
 
 	<!-- Comment this out to use the default OpenFL assets system for the assets/ folder. !-->
 	<define name="USE_ADAPTED_ASSETS" unless="web"/>
@@ -123,6 +128,8 @@
 	<window unless="desktop" width="0" height="0" vsync="true" fullscreen="true"/>
 	<window if="desktop" type="opengl" width="1280" height="720" fullscreen="false" resizable="true" vsync="false"/>
 	<window if="desktop" unless="mac" allowHighDPI="true"/>
+	<!-- PS4: 1920x1080 em tela cheia (a resolucao interna do jogo continua 1280x720 em Main.hx) -->
+	<window if="orbis" width="1920" height="1080" fullscreen="true" resizable="false" vsync="true" allowHighDPI="false"/>
 	<window if="mobile" resizable="false"/>
 	<window if="html5 || switch" resizable="true"/>
 
@@ -161,6 +168,7 @@
 	<set name="BUILD_DIR" value="export/release-32bit" if="32bit" unless="debug"/>
 	<set name="BUILD_DIR" value="export/tracy" if="TRACY"/>
 	<set name="BUILD_DIR" value="latest/" if="beta"/>
+	<set name="BUILD_DIR" value="export/orbis" if="orbis"/>
 
 	<app main="funkin.backend.system.Main" preloader="flixel.system.FlxPreloader"/>
 	<source name="source"/>

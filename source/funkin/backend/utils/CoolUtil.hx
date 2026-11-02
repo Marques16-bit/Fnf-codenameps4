@@ -866,7 +866,7 @@ final class CoolUtil
 	 * @param url
 	 */
 	@:noUsing public static inline function openURL(url:String) {
-		#if linux
+		#if (linux && !orbis)
 		// generally `xdg-open` should work in every distro
 		var cmd = Sys.command("xdg-open", [url]);
 		// run old command JUST IN CASE it fails, which it shouldn't

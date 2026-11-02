@@ -93,7 +93,7 @@ final class MemoryUtil {
 			return funkin.backend.utils.native.Windows.getTotalRam();
 			#elseif mac
 			return funkin.backend.utils.native.Mac.getTotalRam();
-			#elseif linux
+			#elseif (linux && !orbis)
 			return funkin.backend.utils.native.Linux.getTotalRam();
 			#else
 			return 0;
@@ -129,7 +129,7 @@ final class MemoryUtil {
 		return funkin.backend.utils.native.Windows.getCurrentProcessMemory();
 		#elseif (cpp && mac)
 		return funkin.backend.utils.native.Mac.getCurrentProcessMemory();
-		#elseif (cpp && linux)
+		#elseif (cpp && linux && !orbis)
 		return funkin.backend.utils.native.Linux.getCurrentProcessMemory();
 		#else
 		return currentMemUsage();

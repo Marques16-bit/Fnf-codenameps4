@@ -29,7 +29,7 @@ class ModsFolder {
 	/**
 	 * Path to the `mods` folder.
 	 */
-	public static var modsPath:String = "./mods/";
+	public static var modsPath:String = #if orbis "/data/FNF/Mods/" #else "./mods/" #end;
 	/**
 	 * Path to the `addons` folder.
 	 */

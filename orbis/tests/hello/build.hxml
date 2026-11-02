@@ -1,0 +1,7 @@
+-main Main
+-cpp out
+-D toolchain=orbis
+-D orbis
+-D HXCPP_M64
+# para ver o comando exato do compilador/linker quando der erro:
+# -D HXCPP_VERBOSE

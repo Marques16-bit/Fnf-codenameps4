@@ -166,8 +166,13 @@ class Main extends Sprite
 
 		ModsFolder.init();
 		#if MOD_SUPPORT
+		#if orbis
+		if (FileSystem.exists(ModsFolder.modsPath + "autoload.txt"))
+			modToLoad = File.getContent(ModsFolder.modsPath + "autoload.txt").trim();
+		#else
 		if (FileSystem.exists("mods/autoload.txt"))
 			modToLoad = File.getContent("mods/autoload.txt").trim();
+		#end
 
 		ModsFolder.switchMod(modToLoad.getDefault(Options.lastLoadedMod));
 		#end
@@ -282,6 +287,8 @@ class Main extends Sprite
 		Sys.setCwd(haxe.io.Path.addTrailingSlash(VERSION.SDK_INT > 30 ? Context.getObbDir() : Context.getExternalFilesDir()));
 		#elseif (ios || switch)
 		Sys.setCwd(haxe.io.Path.addTrailingSlash(openfl.filesystem.File.applicationStorageDirectory.nativePath));
+		#elseif orbis
+		Sys.setCwd("/data/FNF/");
 		#end
 	}
 

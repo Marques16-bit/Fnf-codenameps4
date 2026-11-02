@@ -1,0 +1,71 @@
+<xml>
+<!--
+  orbis-toolchain.xml  -  HXCPP -> PS4 (OpenOrbis)
+
+  Instalar em  <hxcpp>/toolchain/orbis-toolchain.xml  (scripts/01-install-toolchain.sh faz isso).
+  Ativar com   -D toolchain=orbis -D orbis   (ja esta no tests/hello/build.hxml).
+
+  Notas:
+  - O HXCPP nao tem alvo FreeBSD; por isso compilamos fingindo HX_LINUX.
+  - O hxcpp compila e linka ate o .elf. fself + SFO + gp4 + pkg ficam no pkg/Makefile.
+  - Variavel obrigatoria: OO_PS4_TOOLCHAIN (o hxcpp le variaveis de ambiente como defines).
+  - NAO TESTADO contra a sua versao do hxcpp: rode com HXCPP_VERBOSE=1 e ajuste conforme os erros.
+-->
+<error value="OO_PS4_TOOLCHAIN nao definido (rode: source env.sh)" unless="OO_PS4_TOOLCHAIN"/>
+
+<set name="BINDIR" value="Orbis64"/>
+<set name="LIBEXT" value=".a"/>
+<set name="LIBEXTRA" value=""/>
+<set name="HXCPP_M64" value="1"/>
+
+<compiler id="orbis" exe="clang++">
+  <flag value="-c"/>
+  <flag value="--target=x86_64-pc-freebsd12-elf"/>
+  <flag value="-fPIC"/>
+  <flag value="-funwind-tables"/>
+  <flag value="-isysroot"/>
+  <flag value="${OO_PS4_TOOLCHAIN}"/>
+  <!-- libc++ ANTES do include geral -->
+  <flag value="-isystem"/>
+  <flag value="${OO_PS4_TOOLCHAIN}/include/c++/v1"/>
+  <flag value="-isystem"/>
+  <flag value="${OO_PS4_TOOLCHAIN}/include"/>
+  <flag value="-D__PS4__"/>
+  <flag value="-DHX_LINUX"/>
+  <flag value="-DHXCPP_M64"/>
+  <cppflag value="-std=c++17"/>
+  <flag value="-w"/>
+  <flag value="-O2" unless="debug"/>
+  <flag value="-O0" if="debug"/>
+  <flag value="-g" if="debug"/>
+  <include name="toolchain/common-defines.xml"/>
+  <objdir value="obj/orbis64"/>
+  <outflag value="-o"/>
+  <ext value=".o"/>
+</compiler>
+
+<!-- executavel: ld.lld com o link script do OpenOrbis (igual ao Makefile dos samples) -->
+<linker id="exe" exe="ld.lld">
+  <flag value="-m"/>
+  <flag value="elf_x86_64"/>
+  <flag value="-pie"/>
+  <flag value="--script"/>
+  <flag value="${OO_PS4_TOOLCHAIN}/link.x"/>
+  <flag value="--eh-frame-hdr"/>
+  <flag value="-L${OO_PS4_TOOLCHAIN}/lib"/>
+  <flag value="${OO_PS4_TOOLCHAIN}/lib/crt1.o"/>
+  <lib name="-lc++"/>
+  <lib name="-lc"/>
+  <lib name="-lkernel"/>
+  <ext value=".elf"/>
+  <outflag value="-o"/>
+</linker>
+
+<!-- biblioteca estatica (libstd.a, libzlib.a, libregexp.a e, depois, o liblime.a) -->
+<linker id="static_link" exe="llvm-ar">
+  <flag value="rcs"/>
+  <ext value=".a"/>
+  <prefix value="lib"/>
+  <outflag value=""/>
+</linker>
+</xml>
