@@ -59,10 +59,11 @@ jobs:
 
       - name: hello - compilar e empacotar
         if: inputs.jogo == false
+        env:
+          HXCPP_VERBOSE: 1
         run: |
           bash orbis/scripts/00-check.sh
           bash orbis/scripts/01-install-toolchain.sh
-          bash orbis/scripts/02-build-hxcpp-libs.sh
           bash orbis/scripts/03-build-hello.sh
 
       - name: jogo - bibliotecas Haxe e Lime do engine
@@ -74,12 +75,11 @@ jobs:
           haxelib run lime rebuild hxcpp
           haxelib run lime rebuild tools
 
-      - name: jogo - toolchain orbis e libs do hxcpp
+      - name: jogo - toolchain orbis do hxcpp
         if: inputs.jogo == true
         run: |
           bash orbis/scripts/00-check.sh
           bash orbis/scripts/01-install-toolchain.sh
-          bash orbis/scripts/02-build-hxcpp-libs.sh
 
       - name: jogo - Lime nativo para orbis
         if: inputs.jogo == true
