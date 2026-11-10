@@ -5,4 +5,6 @@ set -euo pipefail
 source "$(dirname "$0")/../env.sh"
 HXCPP_DIR="$(haxelib libpath hxcpp)"
 cp -f "$KIT_DIR/hxcpp/orbis-toolchain.xml" "${HXCPP_DIR}toolchain/orbis-toolchain.xml"
+mkdir -p "${HXCPP_DIR}toolchain/orbis-shim"
+cp -f "$KIT_DIR/hxcpp/shim/"* "${HXCPP_DIR}toolchain/orbis-shim/"
 echo "Instalado em: ${HXCPP_DIR}toolchain/orbis-toolchain.xml"
