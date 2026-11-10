@@ -35,6 +35,9 @@
   <flag value="-D__PS4__"/>
   <flag value="-D_GNU_SOURCE"/>
   <flag value="-D_DEFAULT_SOURCE"/>
+  <!-- o hxcpp (std/Sys.cpp) escolhe o codigo por NEKO_*; o clang com alvo FreeBSD nao define NEKO_LINUX -->
+  <flag value="-DNEKO_LINUX"/>
+  <flag value="-DNEKO_POSIX"/>
   <flag value="-DHX_LINUX"/>
   <flag value="-DHXCPP_M64"/>
   <cppflag value="-std=c++17"/>
