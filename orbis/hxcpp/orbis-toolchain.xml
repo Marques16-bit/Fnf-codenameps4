@@ -20,6 +20,7 @@
 
 <compiler id="orbis" exe="clang++">
   <flag value="-c"/>
+  <flag value="-I${HXCPP}/include"/>
   <flag value="--target=x86_64-pc-freebsd12-elf"/>
   <flag value="-fPIC"/>
   <flag value="-funwind-tables"/>
