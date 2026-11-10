@@ -32,6 +32,8 @@
   <flag value="-isystem"/>
   <flag value="${OO_PS4_TOOLCHAIN}/include"/>
   <flag value="-D__PS4__"/>
+  <flag value="-D_GNU_SOURCE"/>
+  <flag value="-D_DEFAULT_SOURCE"/>
   <flag value="-DHX_LINUX"/>
   <flag value="-DHXCPP_M64"/>
   <cppflag value="-std=c++17"/>
