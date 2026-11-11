@@ -5,7 +5,7 @@ OOS       ?= $(if $(OO_OS),$(OO_OS),linux)
 BIN       := $(TOOLCHAIN)/bin/$(OOS)
 
 ELF        ?= ../tests/hello/out/Main.elf
-TITLE      ?= FNF Orbis Hello
+TITLE      ?= FNF
 TITLE_ID   ?= FNFO00001
 CONTENT_ID ?= IV0000-$(TITLE_ID)_00-FNFORBISHELLO000
 

@@ -23,4 +23,4 @@ make -C "$KIT_DIR/pkg" ELF="$KIT_DIR/tests/hello/$ELF"
 echo
 echo "PKG em: $KIT_DIR/pkg/dist/"
 echo "Enviar:   scripts/send-ftp.sh pkg/dist/<arquivo>.pkg /data/pkg/"
-echo "Resultado no PS4: /data/FNF/hello.log (leia por FTP depois de abrir o app)"
+echo "Resultado no PS4: /data/FNF/boot.log e /data/FNF/hello.log (leia por FTP depois de abrir o app)"

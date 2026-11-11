@@ -59,13 +59,13 @@
   <flag value="--script"/>
   <flag value="${OO_PS4_TOOLCHAIN}/link.x"/>
   <flag value="--eh-frame-hdr"/>
+  <flag value="--wrap=main"/>
   <flag value="-L${OO_PS4_TOOLCHAIN}/lib"/>
   <flag value="${OO_PS4_TOOLCHAIN}/lib/crt1.o"/>
   <lib name="${HXCPP}/toolchain/orbis-shim/orbis-stubs.o"/>
   <lib name="-lc++"/>
   <lib name="-lc"/>
   <lib name="-lkernel"/>
-  <lib name="-lSceNet"/>
   <ext value=".elf"/>
   <outflag value="-o"/>
 </linker>
