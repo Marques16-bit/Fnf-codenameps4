@@ -16,3 +16,5 @@ for h in xlocale.h locale.h execinfo.h dlfcn.h pthread.h sched.h semaphore.h all
     echo "FALTA $h"
   fi
 done
+echo "--- libs SceNet no toolchain:"
+ls "$OO_PS4_TOOLCHAIN/lib" 2>/dev/null | grep -i "SceNet" || echo "nenhuma libSceNet encontrada em $OO_PS4_TOOLCHAIN/lib"
