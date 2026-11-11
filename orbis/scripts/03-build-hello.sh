@@ -3,9 +3,16 @@
 set -euo pipefail
 source "$(dirname "$0")/../env.sh"
 cd "$KIT_DIR/tests/hello"
-if ! haxe build.hxml; then
+LOG="$KIT_DIR/build-hello.log"
+if ! haxe build.hxml 2>&1 | tee "$LOG"; then
   echo
-  echo "=== Falhou. Headers do OpenOrbis (ok / FALTA) ==="
+  echo "=== RESUMO: linhas de erro ==="
+  grep -nE "error:|undefined (symbol|reference)|ld.lld:|fatal|Could not|not found" "$LOG" | tail -n 40 || true
+  echo
+  echo "=== RESUMO: ultimas 25 linhas do log ==="
+  tail -n 25 "$LOG"
+  echo
+  echo "=== Headers do OpenOrbis (ok / FALTA) ==="
   bash "$KIT_DIR/scripts/05-check-headers.sh" || true
   exit 1
 fi
