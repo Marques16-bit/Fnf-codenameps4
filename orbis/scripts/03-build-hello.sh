@@ -18,6 +18,7 @@ if ! haxe build.hxml 2>&1 | tee "$LOG"; then
 fi
 ELF="$(ls out/Main*.elf 2>/dev/null | head -n1 || true)"
 if [ -z "$ELF" ]; then echo "O hxcpp nao gerou o .elf. Rode com -D HXCPP_VERBOSE no build.hxml e veja o erro."; exit 1; fi
+bash "$KIT_DIR/scripts/06-fix-libssl.sh" || true
 make -C "$KIT_DIR/pkg" ELF="$KIT_DIR/tests/hello/$ELF"
 echo
 echo "PKG em: $KIT_DIR/pkg/dist/"

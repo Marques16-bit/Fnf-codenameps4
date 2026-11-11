@@ -7,6 +7,7 @@ cd "$KIT_DIR/.."
 lime build linux -Dorbis -DHXCPP_M64 "$@"
 ELF="$(ls export/orbis/bin/*.elf 2>/dev/null | head -n1 || true)"
 if [ -z "$ELF" ]; then echo "Sem .elf em export/orbis/bin. Veja o erro acima (rode com -v e -DHXCPP_VERBOSE)."; exit 1; fi
+bash "$KIT_DIR/scripts/06-fix-libssl.sh" || true
 make -C "$KIT_DIR/pkg" ELF="$PWD/$ELF" \
   TITLE="Friday Night Funkin Codename Engine" \
   TITLE_ID=FNFO00002 \
